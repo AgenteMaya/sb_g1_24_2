@@ -1,0 +1,24 @@
+//Com essa union, poderíamos colocar facilmente o byte que conseguirmos do utf-8 para colocar no int
+//e o vice-versa tbm seria facilitado. 
+union{
+    unsigned num;
+    unsigned char vBytes [4];
+}
+
+
+unsigned char buffer
+
+if((byte >> 6) != 2)
+{
+    j= 7;
+    qtdBytes = 0
+    while((byte >>j--)&1){
+        qtdBytes++
+    }
+}
+
+buffer = (buffer << 1) + (byte >> i) & 1
+
+bufer + bit
+
+    
