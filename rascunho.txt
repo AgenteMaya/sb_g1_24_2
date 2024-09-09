@@ -21,4 +21,9 @@ buffer = (buffer << 1) + (byte >> i) & 1
 
 bufer + bit
 
+
+"Para fazer a leitura e gravação do arquivo, uma sugestão é pesquisar as funções fwrite/fread e fputc/fgetc."
+
+fputc/fgetc -> pega/bota 1 byte de cada vez do/no arquivo bin;
+
     
