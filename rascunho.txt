@@ -1,7 +1,7 @@
 //Com essa union, poderíamos colocar facilmente o byte que conseguirmos do utf-8 para colocar no int
 //e o vice-versa tbm seria facilitado. 
 union{
-    unsigned num;
+    unsigned int num;
     unsigned char vBytes [4];
 }
 
@@ -26,4 +26,17 @@ bufer + bit
 
 fputc/fgetc -> pega/bota 1 byte de cada vez do/no arquivo bin;
 
-    
+números limites utf-8:
+
+0 - 127 -> 0xxxxxxx
+128 - 2047 -> 110xxxxx 10xxxxxx
+2048 - 65535 -> 1110xxxx 10xxxxxx 10xxxxxx
+65536 - 1114111 -> 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+
+Fluxo do 8 para 32:
+
+Pegar o byte
+
+Contar quantos 1 têm nele - ContaQtdByte - retorna qtd
+
+repetição com
