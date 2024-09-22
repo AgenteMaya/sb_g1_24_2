@@ -47,6 +47,11 @@ int colocaInteiroNoArquivo(FILE *arqOut, int caractere32)
 
 int convUtf32p8(FILE *arquivo_entrada, FILE *arquivo_saida)
 {
+    
+}
+
+int convUtf8p32(FILE *arquivo_entrada, FILE *arquivo_saida)
+{
     unsigned char caracter = 0;
     unsigned char qtdBytes = 0;
     unsigned char bits = 0;
@@ -71,9 +76,4 @@ int convUtf32p8(FILE *arquivo_entrada, FILE *arquivo_saida)
 
 
     }
-}
-
-int convUtf8p32(FILE *arquivo_entrada, FILE *arquivo_saida)
-{
-
 }
