@@ -55,13 +55,12 @@ int convUtf8p32(FILE *arquivo_entrada, FILE *arquivo_saida)
     unsigned char caracter = 0;
     unsigned char qtdBytes = 0;
     unsigned char bits = 0;
-    unsigned int caractere32 = 0xffee;
+    unsigned int caractere32 = 0xfffe;
     int verificaErro = 0;
     while(1)
     {
         caracter = fgetc(arquivo_entrada);
-        if(feof(arquivo_entrada))
-            break;
+        
         qtdBytes = contaQtdBytes(caracter);
         if (qtdBytes != 1)
         {
@@ -72,8 +71,10 @@ int convUtf8p32(FILE *arquivo_entrada, FILE *arquivo_saida)
             }
             caractere32 = 0;
         }
+        if(feof(arquivo_entrada))
+                break;
         bits = pegaBits(caracter, qtdBytes);
-
-
+        caractere32 = colocaBits(bits, caractere32, qtdBytes);
+        
     }
 }
