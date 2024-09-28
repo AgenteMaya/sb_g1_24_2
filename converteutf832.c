@@ -59,7 +59,7 @@ int convUtf8p32(FILE *arquivo_entrada, FILE *arquivo_saida)
     unsigned char caracter = 0;
     unsigned char qtdBytes = 0;
     unsigned char bits = 0;
-    unsigned int caractere32 = 0xfffe;
+    unsigned int caractere32 = 0xfeff;
     int verificaErro = 0;
     while(1)
     {
