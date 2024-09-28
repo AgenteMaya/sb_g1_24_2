@@ -1,6 +1,7 @@
 #include <stdio.h>
+#include "converteutf832.h"
 
-unsigned char contaQtdBytes(unsigned char byte)
+/* unsigned char contaQtdBytes(unsigned char byte)
 {
     unsigned char cont = 0;
     unsigned char i = 7;
@@ -29,10 +30,14 @@ unsigned int colocaBits(unsigned char bits, unsigned int caractere32, unsigned c
         caractere32 += (bits >> (i-1)) & 1;
     }
     return caractere32;
-}
+} */
 
 int main(void)
 {
-    printf("%u\n", colocaBits(0b00010010, 6, 2));
-    return 0;
+    FILE* arqIn = fopen("utf8_peq.txt", "r");
+    FILE* arqOut = fopen("utf32_teste.txt", "w");
+    int num = convUtf8p32(arqIn, arqOut);
+    fclose(arqIn);
+    fclose(arqOut);
+    return num;
 }

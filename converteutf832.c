@@ -36,19 +36,23 @@ unsigned int colocaBits(unsigned char bits, unsigned int caractere32, unsigned c
 int colocaInteiroNoArquivo(FILE *arqOut, int caractere32)
 {
     int verificaErro = 0;
-    verificaErro = fputc(caractere32, arqOut);
-    if (verificaErro == EOF)
+    for(unsigned char i = 0; i < 4; i++)
     {
-        fputs("Erro ao inserir no arquivo", stderr);
-        return -1;
+        verificaErro = fputc((caractere32 >> i * 8), arqOut);
+        if (verificaErro == EOF)
+        {
+            fputs("Erro ao inserir no arquivo", stderr);
+            return -1;
+        }
     }
+    
     return 0;
 }
 
-int convUtf32p8(FILE *arquivo_entrada, FILE *arquivo_saida)
+/* int convUtf32p8(FILE *arquivo_entrada, FILE *arquivo_saida)
 {
     
-}
+} */
 
 int convUtf8p32(FILE *arquivo_entrada, FILE *arquivo_saida)
 {
@@ -72,9 +76,11 @@ int convUtf8p32(FILE *arquivo_entrada, FILE *arquivo_saida)
             caractere32 = 0;
         }
         if(feof(arquivo_entrada))
-                break;
+        {
+            break;
+        }        
         bits = pegaBits(caracter, qtdBytes);
         caractere32 = colocaBits(bits, caractere32, qtdBytes);
-        
     }
+    return 0;
 }
