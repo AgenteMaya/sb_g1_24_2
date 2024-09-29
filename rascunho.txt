@@ -40,3 +40,14 @@ Pegar o byte
 Contar quantos 1 têm nele - ContaQtdByte - retorna qtd
 
 repetição com
+
+Rascunho para a 32!!!
+
+Necessário ver quantos bytes o meu código vai ter
+Para isso, precisa ver se ele é menor que tal número. poderia ser um switch
+
+CANCELA, não pode ser um switch. Pesquisei aqui e, o melhor que deve ser feito é um if-else. o switch é mais para coisas diretas. 
+
+Se houvesse um modo de perceber a partir de alguma divisão ou coisa do tipo, seria legal, mas não to conseguindo pensar em nada
+
+Ok, após sabermos quantos bytes, 
