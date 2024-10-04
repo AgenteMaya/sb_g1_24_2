@@ -18,7 +18,79 @@ unsigned int inverteNum(unsigned int caractere32)
 
 unsigned char contaBytes(unsigned int caractere32)
 {
-    return (((log2(caractere32) + 1) / 8) + 1);
+    unsigned char qtdBytes = 0;
+    unsigned char expoente = log2(caractere32);
+    if (expoente < 7)
+    {
+        qtdBytes = 1;
+    }
+    else if (expoente < 11)
+    {
+        qtdBytes = 2;
+    }
+    else if (expoente < 17)
+    {
+        qtdBytes = 3;
+    }
+    else{
+        qtdBytes = 4;
+    }
+    return qtdBytes;
+}
+
+unsigned char retornaByteObservado(unsigned caractere)
+{
+    unsigned char expoente = log2(caractere);
+    unsigned char numObservado = 0;
+    if (expoente < 8)
+    {
+        numObservado = 0;
+    }
+    else if (expoente < 15)
+    {
+        numObservado = 1;
+    }
+    else if (expoente < 23)
+    {
+        numObservado = 2;
+    }
+    else{
+        numObservado = 3;
+    }
+    return numObservado;
+}
+
+void montaBytes(unsigned char qtdBytes, unsigned caractere32, FILE* arqOut)
+{
+    unsigned char byte8 = 0xff;
+    unsigned char byteObeservado = retornaByteObservado(caractere32);
+    unsigned aux = 0;
+    unsigned char limitesExpoentes[] = {7,15,23,31};
+    unsigned char posCont = 0;
+    if (qtdBytes == 1)
+    {
+        byte8 = (byte8 << 8) + caractere32;
+    }
+    else
+    {
+        for (unsigned char i = 0; i < qtdBytes; i++)
+        {
+            if (!i)
+            {
+                byte8 = byte8 << (8 - qtdBytes);
+                aux = caractere32 >> (8 * byteObeservado);
+                byte8 = byte8 + (aux >> (8 - qtdBytes -1));
+                //jogar  pro arquivo
+                posCont = limitesExpoentes[byteObeservado] - qtdBytes -1;                
+            } 
+            else
+            {
+                byte8 = byte8 << 7;
+                byte8 = caractere32 >> 
+            }
+        }
+    }
+   
 }
 
 unsigned char contaQtdBytes(unsigned char byte)
@@ -80,11 +152,17 @@ int convUtf32p8(FILE *arquivo_entrada, FILE *arquivo_saida)
                 verificaEndian = 1;
             }
             continue;
-        }            
+        }       
+        else
+        {
+            return -1;
+        }     
         if (verificaEndian){
             caractere32 = inverteNum(caractere32);
         }
         qtdBytes = contaBytes(caractere32);
+
+
 
     }
 }

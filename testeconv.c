@@ -15,17 +15,14 @@ unsigned int inverteNum(unsigned int caractere32)
 unsigned char contaBytes(unsigned int caractere32)
 {
     unsigned log = log2(caractere32);
-    printf("expoente: %d\n", log );
-    unsigned dividendo = (log2(caractere32)) / 4;
-    printf("dividendo: %d\n", dividendo);
-
-    return (((log ) / 4));
+    return (log);
 }
+
 
 int main(void)
 {
     unsigned numBigEndian = 0x1ed10100;
-    unsigned numLittleEndian = 0x0080;
+    unsigned numLittleEndian = 0x1;
 
     unsigned numBigInvertido = inverteNum(numBigEndian);
 

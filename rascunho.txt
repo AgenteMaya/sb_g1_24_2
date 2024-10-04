@@ -51,3 +51,18 @@ CANCELA, não pode ser um switch. Pesquisei aqui e, o melhor que deve ser feito 
 Se houvesse um modo de perceber a partir de alguma divisão ou coisa do tipo, seria legal, mas não to conseguindo pensar em nada
 
 Ok, após sabermos quantos bytes, 
+
+
+
+
+
+
+
+
+0xfeff -> little endian
+
+
+11111110 -> 11100000
+
+
+
