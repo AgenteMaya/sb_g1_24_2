@@ -3,7 +3,17 @@
 
 #include "converteutf832.h"
 #include <stdio.h>
-#include <math.h>
+
+unsigned char log2C(unsigned int caractere32)
+{
+    char resultado  = 0;
+    while(caractere32 > 1)
+    {
+        caractere32 >>= 1;
+        resultado +=1;
+    }
+    return resultado;
+}
 
 unsigned int inverteNum(unsigned int caractere32)
 {
@@ -19,7 +29,7 @@ unsigned int inverteNum(unsigned int caractere32)
 unsigned char contaBytes(unsigned int caractere32)
 {
     unsigned char qtdBytes = 0;
-    unsigned char expoente = log2(caractere32);
+    unsigned char expoente = log2C(caractere32);
     if (expoente < 7)
     {
         qtdBytes = 1;
@@ -28,7 +38,7 @@ unsigned char contaBytes(unsigned int caractere32)
     {
         qtdBytes = 2;
     }
-    else if (expoente < 17)
+    else if (expoente < 16)
     {
         qtdBytes = 3;
     }
@@ -40,7 +50,7 @@ unsigned char contaBytes(unsigned int caractere32)
 
 unsigned char retornaByteObservado(unsigned caractere)
 {
-    unsigned char expoente = log2(caractere);
+    unsigned char expoente = log2C(caractere);
     unsigned char numObservado = 0;
     if (expoente < 8)
     {
@@ -60,37 +70,60 @@ unsigned char retornaByteObservado(unsigned caractere)
     return numObservado;
 }
 
-void montaBytes(unsigned char qtdBytes, unsigned caractere32, FILE* arqOut)
+int colocaByteNoArquivo(unsigned char byte8, FILE* arqOut)
 {
+    printf("Entrei na colocaByte\n");
+    printf("byte8: %hhx\n\n", byte8);
+    int verificaErro = fputc(byte8, arqOut);
+    if (verificaErro == EOF)
+    {
+        fputs("Erro ao inserir no arquivo\n", stderr);
+        return -1;
+    }
+    return 0;
+}
+
+int montaEscreveBytes(unsigned char qtdBytes, unsigned caractere32, FILE* arqOut)
+{
+    printf("Entrei na mmontaEscreveByte\n");
+
     unsigned char byte8 = 0xff;
     unsigned char byteObeservado = retornaByteObservado(caractere32);
     unsigned aux = 0;
-    unsigned char limitesExpoentes[] = {7,15,23,31};
-    unsigned char posCont = 0;
+    int verificaErro = 0;
     if (qtdBytes == 1)
     {
         byte8 = (byte8 << 8) + caractere32;
+        verificaErro = colocaByteNoArquivo(byte8, arqOut);
     }
     else
     {
-        for (unsigned char i = 0; i < qtdBytes; i++)
+        for (char i = qtdBytes; i >= 0; i--)
         {
-            if (!i)
+            if (i == qtdBytes)
             {
                 byte8 = byte8 << (8 - qtdBytes);
                 aux = caractere32 >> (8 * byteObeservado);
-                byte8 = byte8 + (aux >> (8 - qtdBytes -1));
-                //jogar  pro arquivo
-                posCont = limitesExpoentes[byteObeservado] - qtdBytes -1;                
+                byte8 = byte8 + (aux >> (8 - qtdBytes -1));            
             } 
+            else if ( i == qtdBytes -1)
+                continue;
             else
             {
                 byte8 = byte8 << 7;
-                byte8 = caractere32 >> 
+
+                byte8 += (caractere32 >> (6 * i)) & 0x3f;
             }
+            
+            verificaErro = colocaByteNoArquivo(byte8, arqOut);
+            if(verificaErro)
+            {
+                return verificaErro;
+            }
+            byte8 = 0xff;
         }
     }
-   
+    return verificaErro;
 }
 
 unsigned char contaQtdBytes(unsigned char byte)
@@ -140,31 +173,42 @@ int colocaInteiroNoArquivo(FILE *arqOut, int caractere32)
 
 int convUtf32p8(FILE *arquivo_entrada, FILE *arquivo_saida)
 {
+    printf("Entrei na conv32To8\n");
+
     unsigned int caractere32 = 0;
     unsigned char qtdBytes = 0;
     int verificaEndian = 0; //se e littleEndian, é 0. Senão, é BigEndian
+    int verificaErro = 0;
+    char ePrimeira = 0;
     while (fread(&caractere32, sizeof(unsigned int), 1, arquivo_entrada) == 1)
     {
-        if (caractere32 == 0xfeff || caractere32 == 0xfffe0000)
+        printf("caractere 32: %x\n", caractere32);
+        if (!ePrimeira)
         {
-            if (caractere32 == 0xfffe0000)
+            if (caractere32 == 0xfeff || caractere32 == 0xfffe0000)
             {
-                verificaEndian = 1;
-            }
-            continue;
-        }       
-        else
-        {
-            return -1;
-        }     
-        if (verificaEndian){
-            caractere32 = inverteNum(caractere32);
+                if (caractere32 == 0xfffe0000)
+                {
+                    verificaEndian = 1;
+                }
+                ePrimeira++;
+            }       
+            else
+            {
+                return -1;
+            }     
         }
-        qtdBytes = contaBytes(caractere32);
-
-
-
+        else{
+            if (verificaEndian){
+                caractere32 = inverteNum(caractere32);
+            }
+            qtdBytes = contaBytes(caractere32);
+            verificaErro = montaEscreveBytes(qtdBytes, caractere32, arquivo_saida);
+            if(verificaErro)
+                return verificaErro;
+            }
     }
+    return 0;
 }
 
 int convUtf8p32(FILE *arquivo_entrada, FILE *arquivo_saida)

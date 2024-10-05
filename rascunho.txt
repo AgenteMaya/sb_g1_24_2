@@ -64,5 +64,3 @@ Ok, após sabermos quantos bytes,
 
 11111110 -> 11100000
 
-
-
