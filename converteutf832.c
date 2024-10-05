@@ -2,7 +2,6 @@
 /* Mayara Ramos Damazio 2210833 33WC */
 
 #include "converteutf832.h"
-#include <stdio.h>
 
 /* log2C
 *   -> Calcula o valor do log de algum número
