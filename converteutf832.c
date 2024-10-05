@@ -4,6 +4,9 @@
 #include "converteutf832.h"
 #include <stdio.h>
 
+/* log2C
+*   -> Calcula o valor do log de algum número
+*/
 unsigned char log2C(unsigned int caractere32)
 {
     char resultado  = 0;
@@ -15,6 +18,9 @@ unsigned char log2C(unsigned int caractere32)
     return resultado;
 }
 
+/* inverteNum
+*   -> Inverte os bytes de um inteiro
+*/
 unsigned int inverteNum(unsigned int caractere32)
 {
     unsigned int aux = 0;
@@ -26,6 +32,9 @@ unsigned int inverteNum(unsigned int caractere32)
     return aux;
 }
 
+/* contaBytes
+*   -> Acha a quantidade de bytes que um caractere no utf-32 tem em utf-8
+*/
 unsigned char contaBytes(unsigned int caractere32)
 {
     unsigned char qtdBytes = 0;
@@ -48,6 +57,9 @@ unsigned char contaBytes(unsigned int caractere32)
     return qtdBytes;
 }
 
+/* retornaByteObservado
+*   -> Acha a "indice" do byte que se quer observar
+*/
 unsigned char retornaByteObservado(unsigned caractere)
 {
     unsigned char expoente = log2C(caractere);
@@ -70,6 +82,9 @@ unsigned char retornaByteObservado(unsigned caractere)
     return numObservado;
 }
 
+/* colocaByteNoArquivo
+*   -> Coloca um Byte no arquivo e trata se der erro
+*/
 int colocaByteNoArquivo(unsigned char byte8, FILE* arqOut)
 {
     printf("Entrei na colocaByte\n");
@@ -83,6 +98,11 @@ int colocaByteNoArquivo(unsigned char byte8, FILE* arqOut)
     return 0;
 }
 
+/* montaEscreveBytes
+*   -> Com a quantidade de bytes que o caractere em utf-8 precisará ter e o inteiro que 
+*      representa o caractere em utf-32, ele monta byte a byte pegando o bits específicos 
+*      para montar um byte seguindo a converção utf-8
+*/
 int montaEscreveBytes(unsigned char qtdBytes, unsigned caractere32, FILE* arqOut)
 {
     printf("Entrei na mmontaEscreveByte\n");
@@ -126,6 +146,10 @@ int montaEscreveBytes(unsigned char qtdBytes, unsigned caractere32, FILE* arqOut
     return verificaErro;
 }
 
+/* contaQtdBytes
+*   -> Conta a quantidade de bytes que o caractere em utf-8 tem
+*      a partir da quantidade de bits 1 antes do primeiro 0
+*/
 unsigned char contaQtdBytes(unsigned char byte)
 {
     unsigned char cont = 0;
@@ -138,6 +162,10 @@ unsigned char contaQtdBytes(unsigned char byte)
     return cont;
 }
 
+/* pegaBits
+*   -> Retorna o char com apenas a parte mais significativa que tem 
+*      os bits que serao utilizados
+*/
 unsigned char pegaBits(unsigned char caractere, unsigned char qtdBytes)
 {
     unsigned char novoByte = 0;
@@ -145,6 +173,10 @@ unsigned char pegaBits(unsigned char caractere, unsigned char qtdBytes)
     return novoByte;
 }
 
+/* colocaBits
+*   -> Coloca bit a bit os bits do char no inteiro que guardara o valor 
+*      do caractere em utf-32
+*/
 unsigned int colocaBits(unsigned char bits, unsigned int caractere32, unsigned char qtdBytes)
 {
     for (unsigned char i = (8-qtdBytes - 1); i > 0; i--)
@@ -155,6 +187,9 @@ unsigned int colocaBits(unsigned char bits, unsigned int caractere32, unsigned c
     return caractere32;
 }
 
+/* colocaInteiroNoArquivo
+*   -> Coloca o inteiro no arquivo e trata se der erro
+*/
 int colocaInteiroNoArquivo(FILE *arqOut, int caractere32)
 {
     int verificaErro = 0;
@@ -171,6 +206,10 @@ int colocaInteiroNoArquivo(FILE *arqOut, int caractere32)
     return 0;
 }
 
+/* convUtf32p8
+*   -> Converte um arquivo escrito em utf-32 para utf-8. 
+*      Trata se o código estiver em Big Endian.
+*/
 int convUtf32p8(FILE *arquivo_entrada, FILE *arquivo_saida)
 {
     printf("Entrei na conv32To8\n");
@@ -211,6 +250,9 @@ int convUtf32p8(FILE *arquivo_entrada, FILE *arquivo_saida)
     return 0;
 }
 
+/* convUtf32p8
+*   -> Converte um arquivo escrito em utf-8 para utf-32. 
+*/
 int convUtf8p32(FILE *arquivo_entrada, FILE *arquivo_saida)
 {
     unsigned char caracter = 0;
