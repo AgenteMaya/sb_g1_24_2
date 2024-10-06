@@ -64,3 +64,13 @@ Ok, após sabermos quantos bytes,
 
 11111110 -> 11100000
 
+Inicial que está dando problema:
+
+linha a0 do arq utf9_grande -> linha 160 arq32_grande_little
+
+num -> 2c8 = 0000 0010 1100 1000
+
+Teoricamente: 
+    Expoente: 9
+    QtdBytes: 2
+    byte observado: 1

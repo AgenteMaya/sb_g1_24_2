@@ -3,6 +3,8 @@
 
 #include "converteutf832.h"
 
+//FUNCOES PARA 32 - 8
+
 /* log2C
 *   -> Calcula o valor do log de algum número
 */
@@ -56,38 +58,11 @@ unsigned char contaBytes(unsigned int caractere32)
     return qtdBytes;
 }
 
-/* retornaByteObservado
-*   -> Acha a "indice" do byte que se quer observar
-*/
-unsigned char retornaByteObservado(unsigned caractere)
-{
-    unsigned char expoente = log2C(caractere);
-    unsigned char numObservado = 0;
-    if (expoente < 8)
-    {
-        numObservado = 0;
-    }
-    else if (expoente < 15)
-    {
-        numObservado = 1;
-    }
-    else if (expoente < 23)
-    {
-        numObservado = 2;
-    }
-    else{
-        numObservado = 3;
-    }
-    return numObservado;
-}
-
 /* colocaByteNoArquivo
 *   -> Coloca um Byte no arquivo e trata se der erro
 */
 int colocaByteNoArquivo(unsigned char byte8, FILE* arqOut)
 {
-    printf("Entrei na colocaByte\n");
-    printf("byte8: %hhx\n\n", byte8);
     int verificaErro = fputc(byte8, arqOut);
     if (verificaErro == EOF)
     {
@@ -104,10 +79,7 @@ int colocaByteNoArquivo(unsigned char byte8, FILE* arqOut)
 */
 int montaEscreveBytes(unsigned char qtdBytes, unsigned caractere32, FILE* arqOut)
 {
-    printf("Entrei na mmontaEscreveByte\n");
-
     unsigned char byte8 = 0xff;
-    unsigned char byteObeservado = retornaByteObservado(caractere32);
     unsigned aux = 0;
     int verificaErro = 0;
     if (qtdBytes == 1)
@@ -122,8 +94,8 @@ int montaEscreveBytes(unsigned char qtdBytes, unsigned caractere32, FILE* arqOut
             if (i == qtdBytes)
             {
                 byte8 = byte8 << (8 - qtdBytes);
-                aux = caractere32 >> (8 * byteObeservado);
-                byte8 = byte8 + (aux >> (8 - qtdBytes -1));            
+                aux = caractere32 >> (6* (qtdBytes -1) );
+                byte8 += aux;            
             } 
             else if ( i == qtdBytes -1)
                 continue;
@@ -144,6 +116,9 @@ int montaEscreveBytes(unsigned char qtdBytes, unsigned caractere32, FILE* arqOut
     }
     return verificaErro;
 }
+
+
+//FUNCOES PARA A 8 - 32
 
 /* contaQtdBytes
 *   -> Conta a quantidade de bytes que o caractere em utf-8 tem
@@ -211,8 +186,6 @@ int colocaInteiroNoArquivo(FILE *arqOut, int caractere32)
 */
 int convUtf32p8(FILE *arquivo_entrada, FILE *arquivo_saida)
 {
-    printf("Entrei na conv32To8\n");
-
     unsigned int caractere32 = 0;
     unsigned char qtdBytes = 0;
     int verificaEndian = 0; //se e littleEndian, é 0. Senão, é BigEndian
@@ -220,7 +193,6 @@ int convUtf32p8(FILE *arquivo_entrada, FILE *arquivo_saida)
     char ePrimeira = 0;
     while (fread(&caractere32, sizeof(unsigned int), 1, arquivo_entrada) == 1)
     {
-        printf("caractere 32: %x\n", caractere32);
         if (!ePrimeira)
         {
             if (caractere32 == 0xfeff || caractere32 == 0xfffe0000)
