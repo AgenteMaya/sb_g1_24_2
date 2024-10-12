@@ -37,8 +37,17 @@ int main(void)
     FILE* arq_In_32 = fopen("utf32_grande_little.mp3", "r");
     FILE* arq_Out_8 = fopen("utf8__grande_teste.txt", "w");
     int num = convUtf32p8(arq_In_32, arq_Out_8);
+    printf("%d\n", num);
     fclose(arq_In_32);
     fclose(arq_Out_8);
+
+    FILE* arq_In_8 = fopen("utf8_grande.txt", "r");
+    FILE* arq_Out_32 = fopen("utf32__grande_teste2.txt", "w");
+    num = convUtf8p32(arq_In_8, arq_Out_32);
+    printf("%d\n", num);
+
+    fclose(arq_In_8);
+    fclose(arq_Out_32);
  
 
     /* FILE* arq_In_32 = fopen("utf32_peq.txt", "r");
