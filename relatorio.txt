@@ -4,15 +4,15 @@ Mayara Ramos Damazio  2210833  33WC
 As rotinas necessárias para as funções convUtf32p8 e convUtf8p32 foram implementadas em pequenos módulos, ou seja, ao invés de ser feito um único código dentro das respectivas funções, foram feitas chamadas de funções auxiliares, mais simples, dentro delas. Isso permitiu que cada função do programa fosse testada separadamente durante o progresso do trabalho, e tornasse o processo de identificar possíveis erros e mal funcionamento mais simples. Por isso, ao serem executadas, as duas funções funcionaram, aparentemente, perfeitamente. Isso foi constatado através da comparação da saída do comando de hexdump dos arquivos originais, utf8_peq.txt e utf32_peq.txt, e os arquivos de saída gerados, utf8_teste.txt e utf32_teste.txt.
 Saída do terminal dos hexdumps dos arquivos utf8_teste.txt, gerado pela convUtf32p8, e utf8_peq:
 
-hexdump utf8_teste.txt
-0000000 4c43 5641 2045 9df0 9e84 4120 5547 2041
-0000010 b0e6 20b4 002e                    	 
-0000015
+$ hexdump -C utf8_teste.txt 
+00000000  43 4c 41 56 45 20 f0 9d  84 9e 20 41 47 55 41 20  |CLAVE .... AGUA |
+00000010  e6 b0 b4 20 2e                                    |... .|
+00000015
 
-hexdump utf8_peq.txt
-0000000 4c43 5641 2045 9df0 9e84 4120 5547 2041
-0000010 b0e6 20b4 002e                    	 
-0000015
+$ hexdump -C utf8_peq.txt 
+00000000  43 4c 41 56 45 20 f0 9d  84 9e 20 41 47 55 41 20  |CLAVE .... AGUA |
+00000010  e6 b0 b4 20 2e                                    |... .|
+00000015
 
 Saída do terminal dos hexdumps dos arquivos utf32_teste.txt, gerado pela convUtf8p32, e utf32_peq:
 
